@@ -24,8 +24,11 @@ public:
     // NOTICE: ⚠ 注意移动到自身问题 ⚠
     DynFibonacci &operator=(DynFibonacci &&another) noexcept{
         if(&another != this){
-            cache = another.cache;
+            cache = new size_t[another.cached];
             cached = another.cached;
+            for (int i = 0; i < cached; ++i) {
+                cache[i] = another.cache[i];
+            }
             return *this;
         }else
             return *this;
