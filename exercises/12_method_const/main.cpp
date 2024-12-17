@@ -5,12 +5,8 @@
 struct Fibonacci {
     int numbers[11];
     // TODO: 修改方法签名和实现，使测试通过
-    int get(int i) {
+    int get(int i) const{
         return numbers[i];
-    }
-    Fibonacci(const initializer_list<int> nums){
-        for(int i = 0;i<nums.length();i++)
-            numbers[i] = nums[i];
     }
 };
 
