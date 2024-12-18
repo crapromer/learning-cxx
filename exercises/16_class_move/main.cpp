@@ -24,11 +24,8 @@ public:
     // NOTICE: ⚠ 注意移动到自身问题 ⚠
     DynFibonacci &operator=(DynFibonacci &&another) noexcept{
         if(&another != this){
-            cache = new size_t[another.cached];
-            cached = another.cached;
-            for (int i = 0; i < cached; ++i) {
-                cache[i] = another.cache[i];
-            }
+            cache = another.cache;
+            another.cache = nullptr;
             return *this;
         }else
             return *this;
@@ -62,7 +59,6 @@ public:
 int main(int argc, char **argv) {
     DynFibonacci fib(12);
     ASSERT(fib[10] == 55, "fibonacci(10) should be 55");
-
     DynFibonacci const fib_ = std::move(fib);
     ASSERT(!fib.is_alive(), "Object moved");
     ASSERT(fib_[10] == 55, "fibonacci(10) should be 55");
