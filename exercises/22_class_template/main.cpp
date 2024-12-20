@@ -30,8 +30,27 @@ struct Tensor4D {
     // `others` 长度为 1 但 `this` 长度不为 1 的维度将发生广播计算。
     // 例如，`this` 形状为 `[1, 2, 3, 4]`，`others` 形状为 `[1, 2, 1, 4]`，
     // 则 `this` 与 `others` 相加时，3 个形状为 `[1, 2, 1, 4]` 的子张量各自与 `others` 对应项相加。
+    template<typename T>
+    T func(T a){
+        if (a==1) return 0;
+        else return 1;
+        
+    }
     Tensor4D &operator+=(Tensor4D const &others) {
         // TODO: 实现单向广播的加法
+        int strides1[] = {shape[1]*shape[2]*shape[3],shape[2]*shape[3],shape[3],1};
+        int strides2[] = {others.shape[1]*others.shape[2]*others.shape[3],others.shape[2]*others.shape[3],others.shape[3],1};
+        for(int d0 = 0;d0<shape[0];d0++){
+            for(int d1 = 0;d1<shape[1];d1++){
+                for(int d2 = 0;d2<shape[2];d2++){
+                    for(int d3 = 0;d3<shape[3];d3++){
+                        int tindex = d0*strides1[0] + d1*strides1[1] +d2*strides1[2] +d3*strides1[3];
+                        int oindex = func(others.shape[0])*d0*strides2[0] + func(others.shape[1])*d1*strides2[1] +func(others.shape[2])*d2*strides2[2] +func(others.shape[3])*d3*strides2[3];
+                        data[tindex] += others.data[oindex];
+                    }
+                }
+            }
+        }
         return *this;
     }
 };
